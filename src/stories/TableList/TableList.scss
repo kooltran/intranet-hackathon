@@ -1,0 +1,53 @@
+.MuiTableRow-head {
+  .MuiTableCell-head {
+    padding: 8px 16px;
+
+    &:last-child {
+      text-align: right;
+    }
+  }
+}
+
+.MuiTableCell-root {
+  border: none !important;
+}
+
+.MuiTableBody-root {
+  .MuiTableRow-root {
+    background: #ddd;
+
+    .MuiTableCell-root {
+      border-bottom: 16px solid #fff !important;
+    }
+
+    // td {
+    //   &:first-child {
+    //     border-top-left-radius: 8px;
+    //     border-bottom-left-radius: 8px;
+    //   }
+
+    //   &:last-child {
+    //     border-top-right-radius: 8px;
+    //     border-bottom-right-radius: 8px;
+    //   }
+    // }
+
+    &:last-child {
+      .MuiTableCell-root {
+        border-bottom: 0 !important;
+      }
+    }
+  }
+}
+
+.MuiTableRow-root {
+  .MuiTableCell-body {
+    &:last-child {
+      text-align: right;
+    }
+  }
+}
+
+.MuiTableSortLabel-icon {
+  opacity: 1 !important;
+}
