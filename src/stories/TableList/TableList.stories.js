@@ -1,8 +1,9 @@
 import React from 'react'
-import Pagination from '@material-ui/lab/Pagination';
+import Pagination from '@material-ui/lab/Pagination'
 
 import TableList from './TableList'
 import List from '../../components/List'
+import Pill from '../../components/Pill'
 
 const tableListData = [
   {
@@ -237,21 +238,21 @@ const sampleData = [
   },
   {
     'From Date - To Date': '01 May 21 - 02 May 21',
-    'Duration (day)': '2',
+    'Duration (day)': '1',
     Type: 'Unpaid Leave',
     Reason: 'Personal Issues',
     Status: 'Pending',
   },
   {
     'From Date - To Date': '01 Jun 21 - 02 Jun 21',
-    'Duration (day)': '2',
+    'Duration (day)': '3',
     Type: 'Annual Leave',
     Reason: 'Personal Issues',
     Status: 'Pending',
   },
   {
     'From Date - To Date': '01 Jul 21 - 02 Jul 21',
-    'Duration (day)': '2',
+    'Duration (day)': '4',
     Type: 'Unpaid Leave',
     Reason: 'Personal Issues',
     Status: 'Rejected',
@@ -265,7 +266,7 @@ const sampleData = [
   },
   {
     'From Date - To Date': '01 Sep 21 - 02 Sep 21',
-    'Duration (day)': '2',
+    'Duration (day)': '5',
     Type: 'Annual Leave',
     Reason: 'Personal Issues',
     Status: 'Approved',
@@ -295,7 +296,6 @@ const sampleData = [
 
 const PAGE_LIMIT = 5
 
-
 export default {
   title: 'Example/TableList',
   component: TableList,
@@ -306,12 +306,24 @@ export default {
 
 // export const TableListDemo = () => <TableList data={tableListData} />
 
-
 export const TableListDemo = () => {
-  const [page, setPage] = React.useState(1);
+  const [page, setPage] = React.useState(1)
+
   const handleChange = (event, value) => {
-    setPage(value);
-  };
+    setPage(value)
+  }
+
+  const ListResolver = d => {
+    const result = { ...d }
+    if (d.Status) {
+      result.Status = (
+        <Pill pillBg="#fdf0e4" pillColor="#F2994A">
+          {d.Status}
+        </Pill>
+      )
+    }
+    return result
+  }
 
   return (
     <>
@@ -332,9 +344,13 @@ export const TableListDemo = () => {
             },
           },
         }}
+        itemResolver={ListResolver}
       />
 
-      <Pagination count={Math.ceil(sampleData.length / PAGE_LIMIT)} onChange={handleChange} />
+      <Pagination
+        count={Math.ceil(sampleData.length / PAGE_LIMIT)}
+        onChange={handleChange}
+      />
     </>
   )
 }

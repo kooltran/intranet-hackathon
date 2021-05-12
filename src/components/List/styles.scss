@@ -1,7 +1,7 @@
 $minWidth: 100px;
 $minHeight: 56px;
 
-@import "../../styles/mixins.scss";
+@import '../../styles/mixins.scss';
 
 .cui-list {
   display: block;
@@ -51,7 +51,7 @@ $minHeight: 56px;
       }
 
       .cui-node {
-        color: var(--color-pepper);
+        color: var(--color-gray3);
         font-size: 0.825rem !important;
         text-align: inherit;
         text-transform: capitalize;
@@ -93,6 +93,7 @@ $minHeight: 56px;
       flex-wrap: wrap;
       flex: 1;
       flex-basis: var(--itemWidth);
+      color: var(--color-main);
 
       &.toggle {
         min-width: 50px;
@@ -118,7 +119,7 @@ $minHeight: 56px;
     }
 
     &.active-inner {
-      border-left: 4px solid var(--color-green35);
+      border-left: 4px solid var(--color-green);
     }
   }
 
@@ -142,7 +143,7 @@ $minHeight: 56px;
   }
 
   .cui-node {
-    font-size: 1rem;
+    font-size: 0.875rem;
     padding: 0.725em 1.5em 0.525em;
     line-height: 1.5em;
 
@@ -150,11 +151,11 @@ $minHeight: 56px;
       position: relative;
 
       &:before {
-        content: "";
+        content: '';
         display: inline-block;
         width: 8px;
         height: 8px;
-        border: 2px solid var(--color-mint);
+        border: 2px solid var(--color-green);
         border-radius: 50%;
         background-color: #ffffff;
         position: absolute;
@@ -165,7 +166,7 @@ $minHeight: 56px;
       }
 
       &:after {
-        content: "";
+        content: '';
         display: inline-block;
         width: 1px;
         border-left: 1px solid #e7ecef;
@@ -187,6 +188,26 @@ $minHeight: 56px;
 
     &:not(:first-child) {
       margin-top: 1.5rem;
+    }
+  }
+}
+
+.MuiPagination-root {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: flex-end;
+
+  .MuiPaginationItem-root {
+    color: var(--color-main);
+
+    &:hover {
+      border-radius: 8px;
+    }
+
+    &.Mui-selected {
+      border-radius: 4px;
+      background: var(--color-green);
+      color: #fff;
     }
   }
 }
@@ -278,25 +299,5 @@ $minHeight: 56px;
         }
       }
     }
-  }
-}
-
-@keyframes openList {
-  0% {
-    transform: translateY(100%);
-  }
-
-  100% {
-    transform: translateY(0);
-  }
-}
-
-@keyframes closeList {
-  0% {
-    transform: translateY(0);
-  }
-
-  100% {
-    transform: translateY(100%);
   }
 }
