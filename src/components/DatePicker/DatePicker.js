@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   format,
   startOfWeek,
@@ -6,11 +6,17 @@ import {
   startOfMonth,
   endOfMonth,
   endOfWeek,
-  isSameMonth,
   addMonths,
   subMonths,
+  getYear,
 } from 'date-fns'
+import classNames from 'classnames'
 
+import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore'
+import NavigateNextIcon from '@material-ui/icons/NavigateNext'
+
+import { sortByMonth, convertToLongDate } from '../../utils/utils'
+import DateCell from './DateCell'
 import './styles.scss'
 
 const Calendar = () => {
@@ -18,27 +24,56 @@ const Calendar = () => {
   const month = new Date().getMonth()
   const day = new Date().getDate()
   const [currentMonth, setCurrentMonth] = useState(new Date())
-  const [chosenDate, setChosenDate] = useState({[new Date(year, month, day)]: { am: true, pm: true }})
+  const [rows, setRows] = useState([])
+  const [months, setMonth] = useState([])
+  const [showMonths, setShowMonths] = useState(false)
+  const [chosenDate, setChosenDate] = useState({
+    [new Date(year, month, day)]: { am: true, pm: true },
+  })
 
-  // React.useEffect(() => {
-  //   setChosenDate({[new Date(year, month, day)]: { am: true, pm: true }})
-  // }, [])
+  const handleShowMonths = () => {
+    setShowMonths(!showMonths)
+  }
+
+  const handleChangeMonth = month => {
+    setCurrentMonth(month)
+    setShowMonths(false)
+  }
 
   const renderHeader = () => {
     const dateFormat = 'MMMM yyyy'
-
     return (
       <div className="cui-calendar__row flex-middle">
-        <div className="col col-start">
+        <div className="col col-start left-arrow">
           <div className="icon" onClick={prevMonth}>
-            {'<'}
+            <NavigateBeforeIcon />
           </div>
         </div>
-        <div className="col col-center">
+        <div className="col col-center month-title" onClick={handleShowMonths}>
           <span>{format(currentMonth, dateFormat)}</span>
+          <div
+            className={classNames('cui-calendar__months', { show: showMonths })}
+          >
+            <div className="months-content">
+              {months.map(month => (
+                <div
+                  key={month}
+                  className={classNames('col col-center month-item', {
+                    selected:
+                      format(month, 'LLL') === format(currentMonth, 'LLL'),
+                  })}
+                  onClick={() => handleChangeMonth(month)}
+                >
+                  {format(month, 'LLL')}
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
-        <div className="col col-end" onClick={nextMonth}>
-          <div className="icon">{'>'}</div>
+        <div className="col col-end right-arrow" onClick={nextMonth}>
+          <div className="icon">
+            <NavigateNextIcon />
+          </div>
         </div>
       </div>
     )
@@ -52,7 +87,7 @@ const Calendar = () => {
 
     for (let i = 0; i < 7; i++) {
       days.push(
-        <div className="col col-center" key={i}>
+        <div className="col col-center day-name" key={i}>
           {format(addDays(startDate, i), dateFormat)}
         </div>
       )
@@ -74,91 +109,48 @@ const Calendar = () => {
     const timeRes = time.reduce((r, t) => ({ ...r, [t]: true }), {})
 
     if (Object.keys(timeRes).length > 0) {
-      setChosenDate({...chosenDate, [day]: timeRes})
+      setChosenDate({ ...chosenDate, [day]: timeRes })
     } else {
       const newChosenDate = Object.keys(chosenDate)
-        .filter((k) => k.toString() !== day.toString())
-        .reduce((a, k) => ({ ...a, [k]: chosenDate[k] }), {});
+        .filter(k => k.toString() !== day.toString())
+        .reduce((a, k) => ({ ...a, [k]: chosenDate[k] }), {})
 
       setChosenDate(newChosenDate)
     }
   }
 
-  const renderCells = () => {
-    const monthStart = startOfMonth(currentMonth)
-    const monthEnd = endOfMonth(monthStart)
-    const startDate = startOfWeek(monthStart)
-    const endDate = endOfWeek(monthEnd)
-
-    const dateFormat = 'd'
-    const rows = []
-
-    let days = []
-    let day = startDate
-    let formattedDate = ''
-
-    while (day <= endDate) {
-      for (let i = 0; i < 7; i++) {
-        const isSelected = !!Object.keys(chosenDate).find(
-          // eslint-disable-next-line no-loop-func
-          date => date.toString() === day.toString()
-        )
-        formattedDate = format(day, dateFormat)
-        const cloneDay = day
-
-        days.push(
-          <div
-            className={`col cell ${
-              !isSameMonth(day, monthStart)
-                ? 'disabled'
-                : isSelected
-                ? 'selected'
-                : ''
-            }`}
-            key={day}
-            onClick={e => onDateClick(e, cloneDay)}
-          >
-            <span className="number">{formattedDate}</span>
-            <div>
-              <input
-                type="checkbox"
-                name="am"
-                onClick={e => handleChangeTime(e, cloneDay)}
-                checked={chosenDate[day] ? chosenDate[day].am : false}
-              />
-              <input
-                type="checkbox"
-                name="pm"
-                onClick={e => handleChangeTime(e, cloneDay)}
-                checked={chosenDate[day] ? chosenDate[day].pm : false}
-              />
+  const renderBody = () => {
+    return (
+      <div className="cui-calendar__body">
+        {rows.map((row, idx) => {
+          return (
+            <div key={idx} className="row">
+              {row?.map(day => (
+                <DateCell
+                  key={day}
+                  chosenDate={chosenDate}
+                  handleChangeTime={handleChangeTime}
+                  onDateClick={handleDayClick}
+                  currentMonth={currentMonth}
+                  day={day}
+                />
+              ))}
             </div>
-          </div>
-        )
-
-        day = addDays(day, 1)
-      }
-      rows.push(
-        <div className="row" key={day}>
-          {days}
-        </div>
-      )
-      days = []
-    }
-    return <div className="cui-calendar__body">{rows}</div>
+          )
+        })}
+      </div>
+    )
   }
 
-  const onDateClick = (e, day) => {
+  const handleDayClick = (e, day) => {
     e.preventDefault()
     const _chosen = Object.keys(chosenDate)
-    if (
-      !_chosen.some(c => c.toString() === day.toString())
-    ) {
-      setChosenDate({...chosenDate, [day]: { am: true, pm: true }})
+    if (!_chosen.some(c => c.toString() === day.toString())) {
+      setChosenDate({ ...chosenDate, [day]: { am: true, pm: true } })
     } else {
       const newChosenDate = Object.keys(chosenDate)
-        .filter((k) => k.toString() !== day.toString())
-        .reduce((a, k) => ({ ...a, [k]: chosenDate[k] }), {});
+        .filter(k => k.toString() !== day.toString())
+        .reduce((a, k) => ({ ...a, [k]: chosenDate[k] }), {})
 
       setChosenDate(newChosenDate)
     }
@@ -172,12 +164,61 @@ const Calendar = () => {
     setCurrentMonth(subMonths(currentMonth, 1))
   }
 
+  useEffect(() => {
+    const monthStart = startOfMonth(currentMonth)
+    const monthEnd = endOfMonth(monthStart)
+    const startDate = startOfWeek(monthStart)
+    const endDate = endOfWeek(monthEnd)
+    const months = []
+
+    const rows = []
+
+    let days = []
+    let day = startDate
+
+    while (day <= endDate) {
+      for (let i = 0; i < 7; i++) {
+        days.push(day)
+
+        day = addDays(day, 1)
+      }
+      rows.push(days)
+      days = []
+    }
+
+    setRows(rows)
+
+    for (let i = 0; i < 12; i++) {
+      months.push(addMonths(new Date(getYear(currentMonth), 0, 1), i))
+    }
+    sortByMonth(months)
+    setMonth(months)
+  }, [currentMonth])
+
   return (
-    <div className="cui-calendar">
-      {renderHeader()}
-      {renderDays()}
-      {renderCells()}
-    </div>
+    <>
+      <div className="cui-calendar">
+        {renderHeader()}
+        {renderDays()}
+        {renderBody()}
+      </div>
+      {Object.keys(chosenDate).map(date => {
+        let time = ''
+
+        if (Object.keys(chosenDate[date]).length === 2) {
+          time = ''
+        } else {
+          time = `, ${Object.keys(chosenDate[date])[0].toUpperCase()}`
+        }
+
+        return (
+          <div key={date}>
+            <span>{convertToLongDate(date)}</span>
+            <span>{time}</span>
+          </div>
+        )
+      })}
+    </>
   )
 }
 

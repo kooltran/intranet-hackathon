@@ -1,4 +1,20 @@
 import moment from 'moment'
+import { format } from 'date-fns'
+
+const months = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
+]
 
 export const sortBy = (
   arr,
@@ -78,7 +94,23 @@ export const parseStrTemplate = (template, data = {}, replaceChar = {}) => {
   return result
 }
 
-export default {
-  sortBy,
-  parseStrTemplate,
+export const sortByMonth = arr => {
+  arr.sort(function (a, b) {
+    return months.indexOf(format(a, 'LLLL')) - months.indexOf(format(b, 'LLLL'))
+  })
+}
+
+export const convertToLongDate = dateString => {
+  if (!dateString) {
+    return undefined
+  }
+
+  const d = new Date(dateString)
+
+  const day = d.getDate()
+  const month = d.getMonth()
+  const monthName = months[month]
+  const year = d.getFullYear()
+
+  return `${day} ${monthName} ${year}`
 }

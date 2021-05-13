@@ -1,18 +1,7 @@
+@import '../../styles/mixins';
+
 .icon {
-  font-family: "Material Icons", serif;
-  font-style: normal;
-  display: inline-block;
-  vertical-align: middle;
-  line-height: 1;
-  text-transform: none;
-  letter-spacing: normal;
-  word-wrap: normal;
-  white-space: nowrap;
-  direction: ltr;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-  -moz-osx-font-smoothing: grayscale;
-  font-feature-settings: "liga";
+  cursor: pointer;
 }
 :root {
   --main-color: #1a8fff;
@@ -52,6 +41,7 @@
 
 .col-center {
   justify-content: center;
+  align-self: center;
   text-align: center;
 }
 
@@ -66,6 +56,25 @@
   max-width: 400px;
   background: var(--neutral-color);
   border: 1px solid var(--border-color);
+
+  &__row {
+    display: flex;
+    padding: 10px 0;
+
+    .month-title {
+      display: flex;
+      width: 100%;
+      flex-basis: 100%;
+      cursor: pointer;
+    }
+
+    .left-arrow,
+    .right-arrow {
+      display: flex;
+      width: 24px;
+      flex-basis: 24px;
+    }
+  }
 
   &__header {
     text-transform: uppercase;
@@ -94,13 +103,49 @@
     }
   }
 
+  &__months {
+    display: none;
+    position: absolute;
+    top: 50px;
+    z-index: 100;
+
+    &.show {
+      display: block;
+    }
+
+    .months-content {
+      display: flex;
+      background: #fff;
+      border: 1px solid var(--border-color);
+      width: 400px;
+      flex-basis: 400px;
+      flex-wrap: wrap;
+      @include shadowy;
+    }
+
+    .month-item {
+      flex-basis: calc(400px / 4);
+      width: calc(400px / 4);
+      border-right: 1px solid var(--border-color);
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border-color);
+      cursor: pointer;
+
+      &:hover,
+      &.selected {
+        background: #ccc;
+      }
+    }
+  }
+
   &__days {
     text-transform: uppercase;
     font-weight: 400;
-    color: var(--text-color-light);
+    color: #852d2d;
     font-size: 70%;
     padding: 0.75em 0;
     border-bottom: 1px solid var(--border-color);
+    font-weight: 600;
   }
 
   &__body {
@@ -127,8 +172,8 @@
         position: absolute;
         font-size: 82.5%;
         line-height: 1;
-        top: 0.75em;
-        right: 0.75em;
+        top: 5px;
+        left: 5px;
         font-weight: 700;
       }
 
