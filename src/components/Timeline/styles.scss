@@ -7,14 +7,43 @@
 
   &__item {
     position: relative;
-    flex: 0 1 100px;
+    flex: 0 1 100%;
     text-align: center;
     list-style: none;
-    color: #818a91;
-    color: var(--color-gray3);
-    padding-top: 30px;
+    color: var(--color-main);
+    padding-top: 35px;
 
-    &:last-child {
+    &.is-done {
+      &:before {
+        background: var(--color-green);
+        border-color: var(--color-green);
+      }
+    }
+
+    &.is-pending {
+      &:after {
+        background: var(--color-gray6);
+      }
+    }
+
+    &.is-rejected {
+      &:before {
+        border-color: var(--color-red);
+      }
+
+      .MuiSvgIcon-root {
+        position: absolute;
+        top: 5px;
+        left: calc(50% - 9px);
+        z-index: 10;
+        color: var(--color-red);
+        width: 18px;
+        height: 18px;
+        font-weight: 600;
+      }
+    }
+
+    &:first-child {
       &:after {
         content: none;
       }
@@ -25,27 +54,28 @@
       position: absolute;
       display: block;
       content: '';
-      background: #e7ecef;
+      background: var(--color-gray6);
       left: 50%;
     }
 
     &:before {
-      height: 18px;
-      width: 18px;
+      height: 24px;
+      width: 24px;
       border-radius: 100%;
       z-index: 2;
       top: 0;
       transform: translateX(-50%);
-      border: 2px solid #e7ecef;
-      border: 2px solid var(--color-gray3);
+      border: 2px solid var(--color-gray6);
       background: #fff;
     }
 
     &:after {
-      height: 4px;
+      height: 2px;
       width: 100%;
       z-index: 1;
-      top: 7px;
+      top: 14px;
+      left: -50%;
+      background: var(--color-green);
     }
   }
 }

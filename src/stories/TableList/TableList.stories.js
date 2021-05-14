@@ -4,289 +4,68 @@ import Pagination from '@material-ui/lab/Pagination'
 import TableList from './TableList'
 import List from '../../components/List'
 import Pill from '../../components/Pill'
-
-const tableListData = [
-  {
-    date: {
-      value: '01 Apr 21 - 02 Apr 21',
-      label: 'From Date -  To Date',
-    },
-    duration: {
-      value: '1',
-      label: 'Duration (day)',
-    },
-    type: {
-      value: 'annual leave',
-      label: 'Type',
-    },
-    reason: {
-      value: 'personal issues',
-      label: 'Reason',
-    },
-    status: {
-      value: 'Pending',
-      label: 'Status',
-    },
-  },
-  {
-    date: {
-      value: '01 May 21 - 02 May 21',
-      label: 'From Date -  To Date',
-    },
-    duration: {
-      value: '2',
-      label: 'Duration (day)',
-    },
-    type: {
-      value: 'annual leave',
-      label: 'Type',
-    },
-    reason: {
-      value: 'personal issues',
-      label: 'Reason',
-    },
-    status: {
-      value: 'Approved',
-      label: 'Status',
-    },
-  },
-  {
-    date: {
-      value: '01 Jul 21 - 02 Jul 21',
-      label: 'From Date -  To Date',
-    },
-    duration: {
-      value: '3',
-      label: 'Duration (day)',
-    },
-    type: {
-      value: 'annual leave',
-      label: 'Type',
-    },
-    reason: {
-      value: 'personal issues',
-      label: 'Reason',
-    },
-    status: {
-      value: 'Rejected',
-      label: 'Status',
-    },
-  },
-  {
-    date: {
-      value: '01 Jun 21 - 02 Jun 21',
-      label: 'From Date -  To Date',
-    },
-    duration: {
-      value: '3',
-      label: 'Duration (day)',
-    },
-    type: {
-      value: 'annual leave',
-      label: 'Type',
-    },
-    reason: {
-      value: 'personal issues',
-      label: 'Reason',
-    },
-    status: {
-      value: 'Rejected',
-      label: 'Status',
-    },
-  },
-  {
-    date: {
-      value: '01 Aug 21 - 02 Aug 21',
-      label: 'From Date -  To Date',
-    },
-    duration: {
-      value: '3',
-      label: 'Duration (day)',
-    },
-    type: {
-      value: 'annual leave',
-      label: 'Type',
-    },
-    reason: {
-      value: 'personal issues',
-      label: 'Reason',
-    },
-    status: {
-      value: 'Rejected',
-      label: 'Status',
-    },
-  },
-  {
-    date: {
-      value: '01 Sep 21 - 02 Sep 21',
-      label: 'From Date -  To Date',
-    },
-    duration: {
-      value: '3',
-      label: 'Duration (day)',
-    },
-    type: {
-      value: 'annual leave',
-      label: 'Type',
-    },
-    reason: {
-      value: 'personal issues',
-      label: 'Reason',
-    },
-    status: {
-      value: 'Rejected',
-      label: 'Status',
-    },
-  },
-  {
-    date: {
-      value: '01 Apr 21 - 02 Apr 21',
-      label: 'From Date -  To Date',
-    },
-    duration: {
-      value: '1',
-      label: 'Duration (day)',
-    },
-    type: {
-      value: 'annual leave',
-      label: 'Type',
-    },
-    reason: {
-      value: 'personal issues',
-      label: 'Reason',
-    },
-    status: {
-      value: 'Pending',
-      label: 'Status',
-    },
-  },
-  {
-    date: {
-      value: '01 May 21 - 02 May 21',
-      label: 'From Date -  To Date',
-    },
-    duration: {
-      value: '2',
-      label: 'Duration (day)',
-    },
-    type: {
-      value: 'annual leave',
-      label: 'Type',
-    },
-    reason: {
-      value: 'personal issues',
-      label: 'Reason',
-    },
-    status: {
-      value: 'Approved',
-      label: 'Status',
-    },
-  },
-  {
-    date: {
-      value: '01 Jul 21 - 02 Jul 21',
-      label: 'From Date -  To Date',
-    },
-    duration: {
-      value: '3',
-      label: 'Duration (day)',
-    },
-    type: {
-      value: 'annual leave',
-      label: 'Type',
-    },
-    reason: {
-      value: 'personal issues',
-      label: 'Reason',
-    },
-    status: {
-      value: 'Rejected',
-      label: 'Status',
-    },
-  },
-  {
-    date: {
-      value: '01 Jun 21 - 02 Jun 21',
-      label: 'From Date -  To Date',
-    },
-    duration: {
-      value: '3',
-      label: 'Duration (day)',
-    },
-    type: {
-      value: 'annual leave',
-      label: 'Type',
-    },
-    reason: {
-      value: 'personal issues',
-      label: 'Reason',
-    },
-    status: {
-      value: 'Rejected',
-      label: 'Status',
-    },
-  },
-]
+import SearchInput from '../../components/SearchInput'
+import { utils } from '../../utils'
 
 const sampleData = [
   {
-    'From Date - To Date': '01 Apr 21 - 02 Apr 21',
+    Date: '10 May 2021',
     'Duration (day)': '2',
     Type: 'Annual Leave',
     Reason: 'Personal Issues',
     Status: 'Pending',
   },
   {
-    'From Date - To Date': '01 May 21 - 02 May 21',
+    Date: '11 May 2021',
     'Duration (day)': '1',
     Type: 'Unpaid Leave',
     Reason: 'Personal Issues',
     Status: 'Pending',
   },
   {
-    'From Date - To Date': '01 Jun 21 - 02 Jun 21',
+    Date: '12 May 2021',
     'Duration (day)': '3',
     Type: 'Annual Leave',
     Reason: 'Personal Issues',
     Status: 'Pending',
   },
   {
-    'From Date - To Date': '01 Jul 21 - 02 Jul 21',
+    Date: '13 May 2021',
     'Duration (day)': '4',
     Type: 'Unpaid Leave',
     Reason: 'Personal Issues',
     Status: 'Rejected',
   },
   {
-    'From Date - To Date': '01 Aug 21 - 02 Aug 21',
+    Date: '14 May 2021',
     'Duration (day)': '2',
     Type: 'Annual Leave',
     Reason: 'Personal Issues',
     Status: 'Pending',
   },
   {
-    'From Date - To Date': '01 Sep 21 - 02 Sep 21',
+    Date: '15 May 2021',
     'Duration (day)': '5',
     Type: 'Annual Leave',
     Reason: 'Personal Issues',
     Status: 'Approved',
   },
   {
-    'From Date - To Date': '01 Jan 21 - 02 Jan 21',
+    Date: '16 May 2021',
     'Duration (day)': '1',
     Type: 'Annual Leave',
     Reason: 'Personal Issues',
     Status: 'Approved',
   },
   {
-    'From Date - To Date': '01 Feb 21 - 02 Feb 21',
+    Date: '17 May 2021',
     'Duration (day)': '4',
     Type: 'Annual Leave',
     Reason: 'Personal Issues',
     Status: 'Rejected',
   },
   {
-    'From Date - To Date': '01 Mar 21 - 02 Mar 21',
+    Date: '18 May 2021',
     'Duration (day)': '3',
     Type: 'Annual Leave',
     Reason: 'Unpaid Issues',
@@ -304,13 +83,24 @@ export default {
   },
 }
 
-// export const TableListDemo = () => <TableList data={tableListData} />
-
 export const TableListDemo = () => {
   const [page, setPage] = React.useState(1)
+  const [listData, setListData] = React.useState(sampleData)
 
   const handleChange = (event, value) => {
     setPage(value)
+  }
+
+  const handleSearch = searchKey => {
+    const daysSearch = searchKey.map(day => utils.convertToLongDate(day))
+    const newList =
+      searchKey.length > 0
+        ? sampleData.filter(val => {
+            return daysSearch.indexOf(val.Date) !== -1
+          })
+        : sampleData
+
+    setListData(newList)
   }
 
   const ListResolver = d => {
@@ -327,9 +117,10 @@ export const TableListDemo = () => {
 
   return (
     <>
+      <SearchInput placeholder="Search" onSearch={handleSearch} />
       <List
         id="cui-sample-list-sortables"
-        data={sampleData.slice((page - 1) * PAGE_LIMIT, page * PAGE_LIMIT)}
+        data={listData.slice((page - 1) * PAGE_LIMIT, page * PAGE_LIMIT)}
         toggleInnerContent={false}
         options={{
           styles: {
@@ -347,10 +138,12 @@ export const TableListDemo = () => {
         itemResolver={ListResolver}
       />
 
-      <Pagination
-        count={Math.ceil(sampleData.length / PAGE_LIMIT)}
-        onChange={handleChange}
-      />
+      {listData.length > PAGE_LIMIT && (
+        <Pagination
+          count={Math.ceil(listData.length / PAGE_LIMIT)}
+          onChange={handleChange}
+        />
+      )}
     </>
   )
 }

@@ -16,12 +16,7 @@ const months = [
   'Dec',
 ]
 
-export const sortBy = (
-  arr,
-  by,
-  order = 'asc',
-  options = { tz: 'Asia/Singapore' }
-) => {
+const sortBy = (arr, by, order = 'asc', options = { tz: 'Asia/Singapore' }) => {
   const tz = options.tz || 'Asia/Singapore'
   if (!by) return arr
   const result = arr.sort((a, b) => {
@@ -72,7 +67,7 @@ export const sortBy = (
   return result
 }
 
-export const parseStrTemplate = (template, data = {}, replaceChar = {}) => {
+const parseStrTemplate = (template, data = {}, replaceChar = {}) => {
   const keys = Object.keys(data)
   const chars = Object.keys(replaceChar)
   let result = template
@@ -94,13 +89,13 @@ export const parseStrTemplate = (template, data = {}, replaceChar = {}) => {
   return result
 }
 
-export const sortByMonth = arr => {
+const sortByMonth = arr => {
   arr.sort(function (a, b) {
     return months.indexOf(format(a, 'LLLL')) - months.indexOf(format(b, 'LLLL'))
   })
 }
 
-export const convertToLongDate = dateString => {
+const convertToLongDate = dateString => {
   if (!dateString) {
     return undefined
   }
@@ -113,4 +108,12 @@ export const convertToLongDate = dateString => {
   const year = d.getFullYear()
 
   return `${day} ${monthName} ${year}`
+}
+
+// eslint-disable-next-line import/no-anonymous-default-export
+export default {
+  sortBy,
+  sortByMonth,
+  convertToLongDate,
+  parseStrTemplate,
 }
