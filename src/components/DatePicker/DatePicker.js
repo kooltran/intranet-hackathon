@@ -15,7 +15,7 @@ import classNames from 'classnames'
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore'
 import NavigateNextIcon from '@material-ui/icons/NavigateNext'
 
-import { sortByMonth, convertToLongDate } from '../../utils/utils'
+import { utils } from '../../utils'
 import DateCell from './DateCell'
 import './styles.scss'
 
@@ -191,7 +191,7 @@ const Calendar = () => {
     for (let i = 0; i < 12; i++) {
       months.push(addMonths(new Date(getYear(currentMonth), 0, 1), i))
     }
-    sortByMonth(months)
+    utils.sortByMonth(months)
     setMonth(months)
   }, [currentMonth])
 
@@ -213,7 +213,7 @@ const Calendar = () => {
 
         return (
           <div key={date}>
-            <span>{convertToLongDate(date)}</span>
+            <span>{utils.convertToLongDate(date)}</span>
             <span>{time}</span>
           </div>
         )

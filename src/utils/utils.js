@@ -110,10 +110,21 @@ const convertToLongDate = dateString => {
   return `${day} ${monthName} ${year}`
 }
 
+const enumerateDaysBetweenDates = (startDate, endDate) => {
+  const now = startDate
+  const dates = []
+  while (now.isSameOrBefore(endDate)) {
+    dates.push(now.format('YYYY-MM-DD'))
+    now.add(1, 'days')
+  }
+  return dates
+}
+
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
   sortBy,
   sortByMonth,
   convertToLongDate,
   parseStrTemplate,
+  enumerateDaysBetweenDates,
 }

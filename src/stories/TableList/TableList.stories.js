@@ -92,15 +92,18 @@ export const TableListDemo = () => {
   }
 
   const handleSearch = searchKey => {
-    const daysSearch = searchKey.map(day => utils.convertToLongDate(day))
-    const newList =
-      searchKey.length > 0
-        ? sampleData.filter(val => {
-            return daysSearch.indexOf(val.Date) !== -1
-          })
-        : sampleData
+    if (Array.isArray(searchKey)) {
+      const daysSearch = searchKey.map(day => utils.convertToLongDate(day))
 
-    setListData(newList)
+      const newList =
+        searchKey.length > 0
+          ? sampleData.filter(val => {
+              return daysSearch.indexOf(val.Date) !== -1
+            })
+          : sampleData
+
+      setListData(newList)
+    }
   }
 
   const ListResolver = d => {

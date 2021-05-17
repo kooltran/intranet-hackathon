@@ -1,25 +1,39 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import SearchIcon from '@material-ui/icons/Search'
 import CloseIcon from '@material-ui/icons/Close'
 import DateRangeIcon from '@material-ui/icons/DateRange'
-import {
-  DatePicker,
-  MuiPickersUtilsProvider,
-  StaticDateRangePicker,
-} from '@material-ui/pickers'
+import moment from 'moment'
 import DayPicker, { DateUtils } from 'react-day-picker'
-import 'react-day-picker/lib/style.css'
-import DateFnsUtils from '@date-io/date-fns'
 
 import { utils } from '../../utils'
 
+import 'react-day-picker/lib/style.css'
 import './styles.scss'
 
 const SearchInput = ({ onSearch, placeholder }) => {
   const [openDatePicker, setOpen] = useState(false)
-  const [date, changeDate] = useState()
-  const [searchKey, setSearchKey] = useState(date)
-  const [selectedDays, setSelectedDays] = useState([])
+  const [searchKey, setSearchKey] = useState([])
+
+  const initDateRange = { from: undefined, to: undefined }
+  const [dateRange, setDateRange] = useState(initDateRange)
+  const modifiers = { start: dateRange.from, end: dateRange.to }
+
+  const isCompletedRange = range =>
+    Object.values(range).every(item => item !== undefined)
+
+  const renderInputValue = () => {
+    if (Array.isArray(searchKey)) {
+      if (isCompletedRange(dateRange)) {
+        return `${utils.convertToLongDate(
+          dateRange.from
+        )} to ${utils.convertToLongDate(dateRange.to)}`
+      } else {
+        return ''
+      }
+    } else {
+      return searchKey
+    }
+  }
 
   const handleSearch = ({ target: { value } }) => {
     setSearchKey(value)
@@ -33,39 +47,39 @@ const SearchInput = ({ onSearch, placeholder }) => {
   }
 
   const handleRemoveSearchKey = () => {
-    setSearchKey('')
-    setSelectedDays([])
-    if (onSearch) {
-      onSearch('')
+    if (Array.isArray(searchKey)) {
+      setSearchKey([])
+      setDateRange(initDateRange)
+      setOpen(false)
+      if (onSearch) {
+        onSearch([])
+      }
+    }
+
+    if (typeof searchKey === 'string') {
+      setSearchKey('')
+      if (onSearch) {
+        onSearch('')
+      }
     }
   }
 
-  const handleDayClick = (day, { selected }) => {
-    const selectedDates = selectedDays.concat()
-    if (selected) {
-      const selectedIndex = selectedDates.findIndex(selectedDay =>
-        DateUtils.isSameDay(selectedDay, day)
-      )
-      selectedDates.splice(selectedIndex, 1)
-    } else {
-      selectedDates.push(day)
-    }
-    onSearch(selectedDates)
-    setSelectedDays(selectedDates)
-  }
+  const handleDayClick = day => {
+    const range = DateUtils.addDayToRange(day, dateRange)
+    setDateRange(range)
 
-  const handleDateChange = day => {
-    changeDate(day)
-    setOpen(false)
-    if (onSearch) {
-      onSearch(day)
+    const selectedDaysRange = utils.enumerateDaysBetweenDates(
+      moment(range.from),
+      moment(range.to)
+    )
+    if (isCompletedRange(range)) {
+      setOpen(false)
+      setSearchKey(selectedDaysRange)
+      if (onSearch) {
+        onSearch(selectedDaysRange)
+      }
     }
   }
-
-  useEffect(() => {
-    // setSearchKey(utils.convertToLongDate(date))
-    setSearchKey(selectedDays.map(date => utils.convertToLongDate(date)))
-  }, [date, selectedDays])
 
   return (
     <div className="cui-search">
@@ -73,7 +87,7 @@ const SearchInput = ({ onSearch, placeholder }) => {
         className="cui-search__input"
         type="text"
         placeholder={placeholder}
-        value={searchKey}
+        value={renderInputValue()}
         onChange={handleSearch}
       />
       <SearchIcon className="icon-search" />
@@ -82,16 +96,12 @@ const SearchInput = ({ onSearch, placeholder }) => {
         <DateRangeIcon className="icon-calendar" />
       </div>
       {openDatePicker && (
-        // <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        //   <DatePicker
-        //     autoOk
-        //     orientation="landscape"
-        //     variant="static"
-        //     value={date}
-        //     onChange={handleDateChange}
-        //   />
-        // </MuiPickersUtilsProvider>
-        <DayPicker selectedDays={selectedDays} onDayClick={handleDayClick} />
+        <DayPicker
+          className="Selectable"
+          selectedDays={[dateRange.from, dateRange]}
+          modifiers={modifiers}
+          onDayClick={handleDayClick}
+        />
       )}
     </div>
   )
